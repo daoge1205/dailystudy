@@ -1,0 +1,41 @@
+php function mail() need an existed mail system
+if you dont have one,it must cant be submitted the email you submit
+so you should do next steps
+one (load sendmail)
+sudo apt-get install sendmail
+sudo apt-get install sendmail-cf
+sudo apt-get install mailutils
+
+two configue sendmail
+cd /etc/mail/
+vim sendmail.mc
+find the line:
+ DAEMON_OPTIONS('Family=inet, Name=MTA-v4, Port=smtp, Addr=127.0.0.1')dnl 
+change 127.0.0.1 to 0.0.0.0
+
+three store old file and create new config file
+cd /etc/mail
+mv sendmail.cf sendmail.cf~
+m4 sendmail.mc > sendmail.cf
+
+four testing 
+echo "This is a test mail." | mail -s "test" xxxxxxxx@qq.com
+              **************warning************
+**the email may be find in your delete or rubbish store zone****
+
+five config the php.ini let the sendmail can run in the php server
+find the line
+/etc/php5/apache2/php.ini
+; sendmail_path = 
+to
+sendmail_path = /usr/sbin/sendmail -t
+
+last 
+sudo /etc/init.d/apache2 restart
+
+it is ok!
+
+
+
+
+
